@@ -373,7 +373,53 @@ ini_set('display_errors', 1);
 </ul>
 
 ---
+## Contoh
 
-Kalau kamu mau, saya bisa buatkan juga contoh proyek sederhana PHP yang mengimplementasikan semua konsep ini, misalnya aplikasi daftar kontak, atau aplikasi keuangan sederhana.
 
-Mau?
+<h2> Menampilkan Data dari Database (file: tampil.php)</h2>
+
+```html
+
+
+<?php
+try {
+    $pdo = new PDO("mysql:host=localhost;dbname=db_website", "root", "");
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $stmt = $pdo->query("SELECT * FROM users");
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Koneksi gagal: " . $e->getMessage());
+}
+?>
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Daftar Users</title>
+</head>
+<body>
+  <h1>Daftar Users</h1>
+  <table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nama</th>
+        <th>Umur</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach($users as $user): ?>
+      <tr>
+        <td><?= htmlspecialchars($user['id']) ?></td>
+        <td><?= htmlspecialchars($user['nama']) ?></td>
+        <td><?= htmlspecialchars($user['umur']) ?></td>
+      </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+  <br>
+  <a href="form.php">Tambah Data Baru</a>
+</body>
+</html>
